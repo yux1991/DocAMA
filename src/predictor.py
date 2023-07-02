@@ -13,11 +13,18 @@ class AbstractPredictor(abc.ABC):
     def _get_answer(self,user_input):
         pass
 
-    def get_answer(self):
-        return self._get_answer()
+    @abc.abstractclassmethod
+    def _clear_memory(self):
+        pass
 
     def predict(self,user_input):
         return self._predict(user_input)
+
+    def get_answer(self):
+        return self._get_answer()
+
+    def clear_memory(self):
+        return self._clear_memory()
 
 class SimplePredictor(AbstractPredictor):
     def __init__(self, config):
@@ -31,3 +38,6 @@ class SimplePredictor(AbstractPredictor):
         self._user_input = user_input
         self._conversation.append(self._user_input)
         return self.get_answer()
+
+    def _clear_memory(self):
+        self._conversation = []

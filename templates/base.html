@@ -9,19 +9,30 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="title" id="title">Ask me anything about the document</div>
 
-      <div class="title" id="title">Ask me anything about the document</div>
-
-      <div class="chat-input">
-        <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if (event.keyCode==13) sendMessage()">
-        <input type="submit" value="Send" onclick="sendMessage()">
-        <div class="counter", id="counter">Characters: <span id="charCount">0</span></div>
+    <div class="hcontainer">
+      <div class="lcontainer">
+        <div class="doc-window" id="doc-window"></div>
       </div>
 
-      <div class="chat-window" id="chat-window"></div>
+      <div class="rcontainer">
+        <div class="chat-window" id="chat-window"></div>
+        <div class="chat-input">
+          <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if (event.keyCode==13) clickSend()">
+          <input type="submit" value="Clear" onclick="clickClear()">
+          <input type="button" value="Send" onclick="clickSend()">
+          <div class="counter", id="counter">Characters: <span id="charCount">0</span></div>
+        </div>
+      </div>
     </div>
-
+    <div class="copyright", id="copyright">
+      &copy;
+      <span id="copyright">
+          <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+      </span>
+      Yu Xiang
+    </div>
     <script src="{{ url_for('static', filename='scripts/base.js') }}"></script>
 
   </body>
