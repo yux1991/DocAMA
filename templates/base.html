@@ -11,6 +11,26 @@
   <body>
     <div class="title" id="title">Ask me anything about the document</div>
 
+    <div class="selection-container">
+      <div class="select-platform">
+        <label for="platform" class="platform-label">
+          Platform
+        </label>
+        <select name="platform">
+            <option value="item1">OpenAI</option>
+            <option value="item2">HuggingFace</option>
+        </select>
+      </div>
+
+      <div class="select-model">
+        <label for="model_name" class="model-label">
+          Model Name
+        </label>
+        <select name="model_name" id="model-select-list">
+        </select>
+      </div>
+    </div>
+
     <div class="hcontainer">
       <div class="lcontainer">
         <div class="doc-window" id="doc-window">

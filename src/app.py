@@ -1,5 +1,6 @@
+import requests
 from flask import Flask, render_template, jsonify, request
-from multiton import SimplePredictorMultiton
+from predictor_multiton import SimplePredictorMultiton
 from configuration import PredictorConfig
 import os, shutil
 
@@ -9,12 +10,22 @@ MODEL_KEY = SimplePredictorMultiton.Key(MODEL_CONFIGURATION)
 TEMPLATE_FOLDER = '../templates'
 STATIC_FOLDER = '../static'
 UPLOAD_FOLDER = '../static/uploads'
+HUGGINGFACEHUB_API_TOKEN = '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'
+OPEN_AI_TOKEN = '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'
+os.environ['HUGGINGFACEHUB_API_TOKEN'] = HUGGINGFACEHUB_API_TOKEN
+os.environ['OPEN_AI_TOKEN'] = OPEN_AI_TOKEN
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
 @app.route('/')
 def home():
     return render_template('base.html')
+
+@app.route('/models')
+def models():
+    model_json = requests.get('https://api.openai.com/v1/models', auth=('Bearer', OPEN_AI_TOKEN)).json()
+    model_list = [js['id'] for js in model_json['data']]
+    return model_list
 
 @app.route('/healthcheck')
 def healthcheck():

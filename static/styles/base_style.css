@@ -33,10 +33,34 @@ body {
   text-align: center;
 }
 
+.selection-container {
+  display: flex;
+  flex-direction: row;
+  height: 6%;
+}
+
+.selection-container .select-platform {
+  height: 100%;
+  width: 50%
+}
+
+.selection-container .select-platform .platform-label {
+  margin-right: 10px;
+}
+
+.selection-container .select-model {
+  height: 100%;
+  width: 50%
+}
+
+.selection-container .model-label {
+  margin-right: 10px;
+}
+
 .hcontainer {
   display: flex;
   flex-direction: row;
-  height: calc(94% - 100px);
+  height: calc(88% - 100px);
 }
 
 .lcontainer {

@@ -21,6 +21,22 @@ $("form#data").submit(function(e) {
   simplePost(url="/upload", data=formData)
 })
 
+$.ajax({
+    url: '/models',
+    type: 'GET',
+    success: function (message) {
+      message.forEach(function(model){
+        var item = document.createElement("option");
+        item.text = model
+        const model_selection = document.getElementById("model-select-list")
+        model_selection.appendChild(item)
+      })
+    },
+    cache: false,
+    contentType: false,
+    processData: false
+})
+
 function clickReset() {
   simplePost(url="/reset", data=null)
 }
