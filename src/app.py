@@ -10,10 +10,8 @@ MODEL_KEY = SimplePredictorMultiton.Key(MODEL_CONFIGURATION)
 TEMPLATE_FOLDER = '../templates'
 STATIC_FOLDER = '../static'
 UPLOAD_FOLDER = '../static/uploads'
-HUGGINGFACEHUB_API_TOKEN = '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'
-OPEN_AI_TOKEN = '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'
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = HUGGINGFACEHUB_API_TOKEN
-os.environ['OPEN_AI_TOKEN'] = OPEN_AI_TOKEN
+OPEN_AI_TOKEN = os.environ.get("OPEN_AI_TOKEN")
+HUGGINGFACEHUB_API_TOKEN = os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
 
