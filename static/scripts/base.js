@@ -1,11 +1,29 @@
-var input = document.getElementById("user-input");
-var charCount = document.getElementById("charCount");
+const input = document.getElementById("user-input");
+const charCount = document.getElementById("charCount");
+const fileInput = document.getElementById('pdfFile');
+const pdfViewer = document.getElementById('pdfViewer');
 var chatHeight = 0;
 
 input.addEventListener("input", function() {
   var count = input.value.length;
   charCount.textContent = count;
 });
+
+fileInput.addEventListener('change', function() {
+  const file = fileInput.files[0];
+  const fileURL = URL.createObjectURL(file);
+  pdfViewer.setAttribute('src', fileURL);
+});
+
+$("form#data").submit(function(e) {
+  e.preventDefault();    
+  var formData = new FormData(this);
+  simplePost(url="/upload", data=formData)
+})
+
+function clickReset() {
+  simplePost(url="/reset", data=null)
+}
 
 function clickSend() {
   var userInput = document.getElementById("user-input").value;
@@ -101,4 +119,18 @@ function postMessage(url, payload) {
       data: JSON.stringify(payload),
       dataType: "json",
     })
+}
+
+function simplePost(url, data) {
+  $.ajax({
+      url: url,
+      type: 'POST',
+      data: data,
+      success: function (message) {
+          alert(message)
+      },
+      cache: false,
+      contentType: false,
+      processData: false
+  })
 }

@@ -13,17 +13,27 @@
 
     <div class="hcontainer">
       <div class="lcontainer">
-        <div class="doc-window" id="doc-window"></div>
+        <div class="doc-window" id="doc-window">
+          <embed class="embed" id="pdfViewer" src="" type="application/pdf">
+        </div>
+        <form class = "upload-form" id="data" method="POST" enctype="multipart/form-data">
+          <label for="pdfFile" class="custom-file-upload">
+            Upload your document
+          </label>
+          <input type="file" name="pdfFile" id="pdfFile" accept="application/pdf">
+          <input type="submit" />
+          <input type="button" value="Reset" onclick="clickReset()">
+        </form>
       </div>
 
       <div class="rcontainer">
         <div class="chat-window" id="chat-window"></div>
         <div class="chat-input">
           <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if (event.keyCode==13) clickSend()">
-          <input type="submit" value="Clear" onclick="clickClear()">
-          <input type="button" value="Send" onclick="clickSend()">
-          <div class="counter", id="counter">Characters: <span id="charCount">0</span></div>
+          <input type="button" value="Clear" onclick="clickClear()">
+          <input type="submit" value="Send" onclick="clickSend()">
         </div>
+        <div class="counter", id="counter">Characters: <span id="charCount">0</span></div>
       </div>
     </div>
     <div class="copyright", id="copyright">
