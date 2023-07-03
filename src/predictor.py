@@ -1,4 +1,7 @@
 import abc
+from langchain import LLMChain, PromptTemplate
+from llm_multiton import LLMMultiton
+from configuration import LLMConfig
 
 class AbstractPredictor(abc.ABC):
     def __init__(self, config):
@@ -31,12 +34,35 @@ class SimplePredictor(AbstractPredictor):
         super().__init__(config)
     
     def _get_answer(self):
-        answer = ' '.join(self._conversation) + ' received'
+        template = """Question: {question}
+
+        Answer: """
+
+        prompt = PromptTemplate(
+                template=template,
+            input_variables=['question']
+        )
+
+        # user question
+        question = ';'.join(self._conversation) 
+
+        llm_configuration = LLMConfig(platform='hugging-face', model_name='google/flan-t5-small', temperature=1e-10)
+        llm = LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_llm()
+
+        llm_chain = LLMChain(
+            prompt=prompt,
+            llm=llm
+        )
+
+        print('Question: '+question)
+        answer = llm_chain.run(question)
+        print('Answer: '+answer)
         return answer
 
     def _predict(self, user_input):
         self._user_input = user_input
         self._conversation.append(self._user_input)
+
         return self.get_answer()
 
     def _clear_memory(self):
