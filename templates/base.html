@@ -13,22 +13,23 @@
 
     <div class="selection-container">
       <div class="select-platform">
-        <label for="platform" class="platform-label">
+        <label for="platform-select-list" class="platform-label">
           Platform
         </label>
-        <select name="platform">
-            <option value="item1">OpenAI</option>
-            <option value="item2">HuggingFace</option>
+        <select name="platform" id="platform-select-list">
+            <option value="huggingface">HuggingFace</option>
+            <option value="openai">OpenAI</option>
         </select>
       </div>
 
       <div class="select-model">
-        <label for="model_name" class="model-label">
+        <label for="model-select-list" class="model-label">
           Model Name
         </label>
         <select name="model_name" id="model-select-list">
         </select>
       </div>
+      <input type="button" value="Load LLM" onclick="clickLoad()">
     </div>
 
     <div class="hcontainer">
@@ -38,7 +39,7 @@
         </div>
         <form class = "upload-form" id="data" method="POST" enctype="multipart/form-data">
           <label for="pdfFile" class="custom-file-upload">
-            Upload your document
+            Upload your document...
           </label>
           <input type="file" name="pdfFile" id="pdfFile" accept="application/pdf">
           <input type="submit" />
@@ -50,8 +51,8 @@
         <div class="chat-window" id="chat-window"></div>
         <div class="chat-input">
           <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if (event.keyCode==13) clickSend()">
-          <input type="button" value="Clear" onclick="clickClear()">
-          <input type="submit" value="Send" onclick="clickSend()">
+          <input type="submit" id="send-user-input" value="Send" onclick="clickSend()">
+          <input type="button" id="clear-user-input" value="Clear" onclick="clickClear()">
         </div>
         <div class="counter", id="counter">Characters: <span id="charCount">0</span></div>
       </div>

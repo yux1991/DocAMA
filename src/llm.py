@@ -8,19 +8,19 @@ class AbstractLLM(abc.ABC):
         self._config = config
 
     @abc.abstractclassmethod
-    def _get_llm(self,user_input):
+    def _get_instance(self,user_input):
         pass
 
-    def get_llm(self):
-        return self._get_llm()
+    def get_instance(self):
+        return self._get_instance()
 
 class LLM(AbstractLLM):
     def __init__(self, config):
         super().__init__(config)
     
-    def _get_llm(self):
+    def _get_instance(self):
         platform = self._config.platform
         if platform == 'openai':
-            return OpenAI(model_name=self._config.model_name, model_kwargs={'temperature':self._config.temperature})
-        elif platform == 'hugging-face':
+            return OpenAI(model_name=self._config.model_name, temperature=self._config.temperature)
+        elif platform == 'huggingface':
             return HuggingFaceHub(repo_id=self._config.model_name, model_kwargs={'temperature':self._config.temperature})

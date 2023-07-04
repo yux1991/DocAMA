@@ -2,7 +2,9 @@ const input = document.getElementById("user-input");
 const charCount = document.getElementById("charCount");
 const fileInput = document.getElementById('pdfFile');
 const pdfViewer = document.getElementById('pdfViewer');
-var chatHeight = 0;
+const platformSelectList = document.getElementById('platform-select-list');
+const modelSelectList = document.getElementById('model-select-list');
+var modelLoaded = false;
 
 input.addEventListener("input", function() {
   var count = input.value.length;
@@ -15,27 +17,85 @@ fileInput.addEventListener('change', function() {
   pdfViewer.setAttribute('src', fileURL);
 });
 
+platformSelectList.addEventListener('change', function () {
+  document.getElementById("model-select-list").innerHTML = "";
+  if (this.value == 'openai') {
+    getOpenAIModels();
+  } else if (this.value == 'huggingface') {
+    getHuggingFaceModels();
+  };
+})
+
 $("form#data").submit(function(e) {
   e.preventDefault();    
   var formData = new FormData(this);
   simplePost(url="/upload", data=formData)
 })
 
-$.ajax({
-    url: '/models',
-    type: 'GET',
-    success: function (message) {
-      message.forEach(function(model){
-        var item = document.createElement("option");
-        item.text = model
-        const model_selection = document.getElementById("model-select-list")
-        model_selection.appendChild(item)
-      })
-    },
-    cache: false,
-    contentType: false,
-    processData: false
-})
+if (platformSelectList.value=='openai') {
+    getOpenAIModels()
+  } else if (platformSelectList.value=='huggingface') {
+    getHuggingFaceModels()
+  }
+
+
+function getOpenAIModels() {
+  $.ajax({
+      url: '/openai_models',
+      type: 'GET',
+      success: function (message) {
+        message.forEach(function(model){
+          var item = document.createElement("option");
+          item.text = model
+          if (model == 'text-davinci-003') {
+            item.selected='selected';
+          }
+          const model_selection = document.getElementById("model-select-list")
+          model_selection.appendChild(item)
+        })
+      },
+      cache: false,
+      contentType: false,
+      processData: false
+  })
+}
+
+function getHuggingFaceModels() {
+  $.ajax({
+      url: '/huggingface_models',
+      type: 'GET',
+      success: function (message) {
+        message.forEach(function(model){
+          var item = document.createElement("option");
+          if (model == 'google/flan-t5-small') {
+            item.selected='selected';
+          }
+          item.text = model
+          const model_selection = document.getElementById("model-select-list")
+          model_selection.appendChild(item)
+        })
+      },
+      cache: false,
+      contentType: false,
+      processData: false
+  })
+}
+
+function clickLoad() {
+  payload = {platform: platformSelectList.value, model_name: modelSelectList.value}
+  message = postJSON(url="/load_model", data=payload)
+  message.then(js => {
+    alert(js.message)
+  })
+  document.getElementById("user-input").value = "";
+  document.getElementById("chat-window").innerHTML = "";
+  $.ajax({
+      url: '/clearmemory',
+      type: 'POST',
+      data: null,
+  })
+  modelLoaded = true;
+}
 
 function clickReset() {
   simplePost(url="/reset", data=null)
@@ -62,8 +122,9 @@ function clickSend() {
 function clickClear() {
     document.getElementById("user-input").value = "";
     document.getElementById("chat-window").innerHTML = "";
-    clearMemory();
-    showHelpMessage("Memory cleared!");
+    if (modelLoaded == true) {
+      clearMemory();
+    }
 }
 
 function showUserMessage(userInput) {
@@ -87,13 +148,17 @@ function showAiMessage(userInput) {
     aiMessageContainer.className = "ai-message";
     var aiMessageBubble = document.createElement("div");
     aiMessageBubble.className = "ai-message-bubble";
-    returnedMessage = postMessage(url="/calculate", payload={user_input: userInput})
+    returnedMessage = postJSON(url="/calculate", payload={user_input: userInput})
     returnedMessage.then(js => {
-        aiMessageBubble.textContent = js.answer;
+        if (typeof js.answer == 'string') {
+          aiMessageBubble.textContent = js.answer;
+          aiMessageContainer.appendChild(aiMessageBubble);
+          chatWindow.prepend(aiMessageContainer);
+        } else if (typeof js.alert == 'string') {
+          showHelpMessage(js.alert);
+        }
       });
   
-    aiMessageContainer.appendChild(aiMessageBubble);
-    chatWindow.prepend(aiMessageContainer);
 }
 
 function showHelpMessage(message) {
@@ -110,7 +175,7 @@ function showHelpMessage(message) {
 }
 
 function clearMemory() {
-    postMessage(url="/clearmemory", payload=null)
+    simplePost(url="/clearmemory", data=null)
 }
 
 function getStyle(oElm, strCssRule){
@@ -127,14 +192,14 @@ function getStyle(oElm, strCssRule){
   return strValue;
 }
 
-function postMessage(url, payload) {
-    return $.ajax({
-      type: "POST",
-      url: url,
-      contentType: "application/json",
-      data: JSON.stringify(payload),
-      dataType: "json",
-    })
+function postJSON(url, payload) {
+  return $.ajax({
+    type: "POST",
+    url: url,
+    contentType: "application/json",
+    data: JSON.stringify(payload),
+    dataType: "json",
+  })
 }
 
 function simplePost(url, data) {

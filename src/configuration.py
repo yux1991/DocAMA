@@ -1,19 +1,19 @@
 from dataclasses import dataclass, field
+from typing import Dict
 
 @dataclass(frozen=True)
 class PredictorConfig():
-    name: str = field
-    key: str = field(init=False)
+    platform: str = field
+    model_name: str = field
 
     def __post_init__(self):
-        object.__setattr__(self, "key", self.name)
+        pass
 
 @dataclass(frozen=True)
 class LLMConfig():
     platform: str = field
     model_name: str = field
     temperature: float = field
-    key: str = field(init=False)
 
     def __post_init__(self):
-        object.__setattr__(self, "key", self.model_name)
+        pass
