@@ -2,15 +2,15 @@ import requests
 from flask import Flask, render_template, jsonify, request
 from predictor_multiton import SimplePredictorMultiton
 from configuration import PredictorConfig
-import os, shutil
+import os, shutil, json
+from huggingface_hub import HfApi, ModelFilter
 
 
-MODEL_CONFIGURATION = PredictorConfig('test')
-MODEL_KEY = SimplePredictorMultiton.Key(MODEL_CONFIGURATION)
 TEMPLATE_FOLDER = '../templates'
 STATIC_FOLDER = '../static'
 UPLOAD_FOLDER = '../static/uploads'
-OPEN_AI_TOKEN = os.environ.get("OPEN_AI_TOKEN")
+CONFIG_FOLDER = '../config'
+OPENAI_API_KEY = os.environ.get("OPEN_AI_TOKEN")
 HUGGINGFACEHUB_API_TOKEN = os.environ.get("HUGGINGFACEHUB_API_TOKEN")
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
@@ -19,11 +19,47 @@ app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLD
 def home():
     return render_template('base.html')
 
-@app.route('/models')
-def models():
-    model_json = requests.get('https://api.openai.com/v1/models', auth=('Bearer', OPEN_AI_TOKEN)).json()
-    model_list = [js['id'] for js in model_json['data']]
-    return model_list
+@app.route('/openai_models')
+def openai_models():
+    model_list_file = os.path.join(CONFIG_FOLDER, 'openai_models.json')
+    if os.path.exists(model_list_file):
+        model_json = json.load(open(model_list_file, 'r'))
+    else:
+        model_json = requests.get('https://api.openai.com/v1/models', auth=('Bearer', OPENAI_API_KEY)).json()
+        json.dump(model_json, open(model_list_file, 'w'))
+
+    return sorted([js['id'] for js in model_json['data']])
+
+@app.route('/huggingface_models')
+def huggingface_models():
+    model_list_file = os.path.join(CONFIG_FOLDER, 'huggingface_models.json')
+    if os.path.exists(model_list_file):
+        model_json = json.load(open(model_list_file, 'r'))
+    else:
+        api = HfApi()
+        models = []
+        for aut, name, task in [("lmsys", "vicuna", "text-generation"),
+                                ("google", "flan-t5", "text2text-generation"),
+                                ("amazon", "LightGPT", "text-generation")]:
+            model_list = list(api.list_models(filter=ModelFilter(author=aut, model_name=name, task=task)))
+            models = models + [m for m in model_list if m.modelId.startswith(aut)]
+        model_json = []
+        for m in models:
+            d = m.__dict__
+            del d['siblings']
+            model_json.append(d)
+        json.dump(model_json, open(model_list_file, 'w'))
+    return sorted([m['modelId'] for m in model_json])
+
+@app.route('/load_model', methods=['POST'])
+def load_model():
+    if request.method == 'POST':
+        global MODEL_KEY
+        request_json = request.get_json()
+        model_configuration = PredictorConfig(platform=request_json['platform'], model_name=request_json['model_name'])
+        MODEL_KEY = SimplePredictorMultiton.Key(model_configuration)
+        SimplePredictorMultiton.get_instance(MODEL_KEY)
+        return jsonify({'message': 'Model loaded!'})
 
 @app.route('/healthcheck')
 def healthcheck():
@@ -35,9 +71,14 @@ def calculate():
     if request.method == 'POST':
         message = request.get_json()
         user_input = message['user_input']
-        predictor = SimplePredictorMultiton.get_instance(MODEL_KEY)
-        answer = predictor.predict(user_input=user_input)
-        response = jsonify({'answer': answer})
+        try:
+            MODEL_KEY
+        except NameError:
+            response = jsonify({'alert': 'Please load the LLM model first!'})
+        else:
+            predictor = SimplePredictorMultiton.get_instance(MODEL_KEY)
+            answer = predictor.predict(user_input=user_input)
+            response = jsonify({'answer': answer})
         return response
 
 @app.route('/clearmemory', methods=['POST'])
@@ -45,8 +86,7 @@ def clear_memory():
     if request.method == 'POST':
         predictor = SimplePredictorMultiton.get_instance(MODEL_KEY)
         predictor.clear_memory()
-        response = jsonify({'status': 'SUCCESS'})
-        return response
+        return 'Memory cleared'
 
 @app.route('/upload', methods=['POST'])
 def upload():

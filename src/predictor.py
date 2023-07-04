@@ -4,9 +4,11 @@ from llm_multiton import LLMMultiton
 from configuration import LLMConfig
 
 class AbstractPredictor(abc.ABC):
-    def __init__(self, config):
-        self._config = config
+    def __init__(self, model_config):
+        self._model_config = model_config
         self._conversation = []
+        llm_configuration = LLMConfig(platform=self._model_config.platform, model_name=self._model_config.model_name, temperature=1e-10)
+        LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_instance()
 
     @abc.abstractclassmethod
     def _predict(self,user_input):
@@ -30,8 +32,8 @@ class AbstractPredictor(abc.ABC):
         return self._clear_memory()
 
 class SimplePredictor(AbstractPredictor):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, model_config):
+        super().__init__(model_config)
     
     def _get_answer(self):
         template = """Question: {question}
@@ -46,8 +48,9 @@ class SimplePredictor(AbstractPredictor):
         # user question
         question = ';'.join(self._conversation) 
 
-        llm_configuration = LLMConfig(platform='hugging-face', model_name='google/flan-t5-small', temperature=1e-10)
-        llm = LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_llm()
+        llm_configuration = LLMConfig(platform=self._model_config.platform, model_name=self._model_config.model_name, temperature=1e-10)
+        llm = LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_instance()
+
 
         llm_chain = LLMChain(
             prompt=prompt,

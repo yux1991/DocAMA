@@ -9,17 +9,17 @@ class SimplePredictorMultiton():
     @dataclass(frozen=True)
     class Key:
         config: PredictorConfig = field
-        simple_predictor_key: str = field(init=False)
+        model_config: PredictorConfig = field(init=False)
 
         def __post_init__(self):
-            object.__setattr__(self, "simple_predictor_key", self.config.key)
+            object.__setattr__(self, "model_config", self.config)
 
     @classmethod
     def get_instance(cls, key: Key) -> SimplePredictor:
         instance = cls._pool.get(key)
         if instance is None:
             instance = SimplePredictor(
-                config = key.config
+                model_config = key.model_config
             )
             cls._pool[key] = instance
         return instance
