@@ -1,9 +1,10 @@
 /* Global Styles */
 
 :root {
-  --blue-color: #3498DB;
+  --blue-color: #0089e4;
   --green-color: #adff2f;
   --gray-color: #e1e1e1;
+  --yellow-color: rgb(255,218,26);
   --dark-gray-color: #757575;
   --black-color: #000000;
   --white-color: #ffffff;
@@ -22,15 +23,16 @@ body {
   font-size: calc(0.6em + 0.5vw);
   min-width: 1000px;
   min-height: 500px;
+  background-image: linear-gradient(to bottom, rgba(255,0,0,0), rgb(0, 47, 167));
 }
 
 .title {
   font-family: sans-serif;
-  font-weight: bold;
+  font-weight:900;
   color: var(--black-color);
   font-size: calc(1.5em + 0.5vw);
   margin: 0;
-  height: 40px;
+  height: 60px;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
@@ -44,9 +46,9 @@ body {
 
 .selection-container .select-platform {
   height: 100%;
-  padding-left: 20%;
   padding-top: 5px;
-  width: 20%
+  width: auto;
+  margin-right: 25px;
 }
 
 .selection-container .select-platform .platform-label {
@@ -56,8 +58,9 @@ body {
 
 .selection-container .select-model {
   height: 100%;
-  width: 30%;
+  width: auto;
   padding-top: 5px;
+  margin-right: 10px;
 }
 
 .selection-container .select-model .model-label {
@@ -73,8 +76,8 @@ body {
   font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
-  background-color: var(--blue-color);
-  color: var(--white-color);
+  background-color: var(--yellow-color);
+  color: var(--black-color);
   cursor: pointer;
 }
 
@@ -96,10 +99,16 @@ body {
   background-color: var(--white-color);
   border-radius: 10px;
   box-shadow: 0 2px 5px var(--shadow-color);
-  padding: 20px;
+  padding: 0;
   height: 100vh;
   overflow-y: auto;
   display: flex;
+}
+
+.lcontainer .doc-window .embed {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
 }
 
 .lcontainer .upload-form {
@@ -144,8 +153,8 @@ body {
   font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
-  background-color: var(--blue-color);
-  color: var(--white-color);
+  background-color: var(--yellow-color);
+  color: var(--black-color);
   cursor: pointer;
 }
 
@@ -161,11 +170,6 @@ body {
   background-color: var(--gray-color);
   color: var(--black-color);
   cursor: pointer;
-}
-
-.lcontainer .doc-window .embed {
-  width: 100%;
-  height: 100%;
 }
 
 .rcontainer {
@@ -214,8 +218,8 @@ body {
   font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
-  background-color: var(--blue-color);
-  color: var(--white-color);
+  background-color: var(--yellow-color);
+  color: var(--black-color);
   cursor: pointer;
 }
 
@@ -237,6 +241,7 @@ body {
   text-align:right;
   padding-right: 10px;
   height: 20px;
+  color: var(--white-color);
 }
 
 .user-message {
@@ -295,10 +300,10 @@ body {
 
 .copyright {
   margin: 0;
-  height: 100px;
+  height: 80px;
   padding-top: 50px;
   padding-bottom: 10px;
-  color: var(--black-color);
+  color: var(--white-color);
   text-align: center;
   font-size: 1em;
 }

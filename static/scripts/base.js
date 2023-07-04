@@ -1,9 +1,8 @@
 const input = document.getElementById("user-input");
 const charCount = document.getElementById("charCount");
-const fileInput = document.getElementById('pdfFile');
-const pdfViewer = document.getElementById('pdfViewer');
 const platformSelectList = document.getElementById('platform-select-list');
 const modelSelectList = document.getElementById('model-select-list');
+const fileInput = document.getElementById('pdfFile');
 var modelLoaded = false;
 
 input.addEventListener("input", function() {
@@ -11,9 +10,10 @@ input.addEventListener("input", function() {
   charCount.textContent = count;
 });
 
-fileInput.addEventListener('change', function() {
+fileInput.addEventListener('input', function() {
   const file = fileInput.files[0];
   const fileURL = URL.createObjectURL(file);
+  var pdfViewer = document.getElementById('pdfViewer');
   pdfViewer.setAttribute('src', fileURL);
 });
 
@@ -99,6 +99,14 @@ function clickLoad() {
 
 function clickReset() {
   simplePost(url="/reset", data=null)
+  var docWindow = document.getElementById('doc-window');
+  docWindow.replaceChildren();
+  var embedDoc = document.createElement("embed");
+  embedDoc.className = "embed";
+  embedDoc.id = "pdfViewer";
+  embedDoc.type = "application/pdf";
+  docWindow.appendChild(embedDoc);
+  fileInput.value = null;
 }
 
 function clickSend() {
