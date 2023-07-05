@@ -20,7 +20,7 @@ class LLM(AbstractLLM):
     
     def _get_instance(self):
         platform = self._config.platform
-        if platform == 'openai':
+        if platform == 'OpenAI':
             return OpenAI(model_name=self._config.model_name, temperature=self._config.temperature)
-        elif platform == 'huggingface':
+        elif platform == 'HuggingFace':
             return HuggingFaceHub(repo_id=self._config.model_name, model_kwargs={'temperature':self._config.temperature})
