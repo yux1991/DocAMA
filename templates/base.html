@@ -9,24 +9,23 @@
   </head>
 
   <body>
-    <div class="title" id="title">Ask me anything about the document</div>
+    <div class="title" id="title"><h1>Ask me anything about the document</h1></div>
 
     <div class="selection-container">
-      <div class="select-platform">
-        <label for="platform-select-list" class="platform-label">
-          Platform
-        </label>
+      <div class="select-platform" id="select-platform">
         <select name="platform" id="platform-select-list">
-            <option value="huggingface">HuggingFace</option>
-            <option value="openai">OpenAI</option>
+            <option value="0">Select platform:</option>
+            <option value="1">HuggingFace</option>
+            <option value="2">OpenAI</option>
         </select>
       </div>
 
-      <div class="select-model">
-        <label for="model-select-list" class="model-label">
-          Model Name
-        </label>
+      <div class="select-model" id="select-model">
         <select name="model_name" id="model-select-list">
+            <option value="0">Select model:</option>
+            <option value="1">test</option>
+            <option value="2">test2</option>
+            <option value="3">test3</option>
         </select>
       </div>
       <input type="button" value="Load LLM" onclick="clickLoad()">
@@ -65,6 +64,5 @@
       Yu Xiang
     </div>
     <script src="{{ url_for('static', filename='scripts/base.js') }}"></script>
-
   </body>
 </html>

@@ -1,10 +1,11 @@
-/* Global Styles */
+@import
+url('https://fonts.googleapis.com/css?family=Cairo');
 
 :root {
   --blue-color: #0089e4;
   --green-color: #adff2f;
-  --gray-color: #e1e1e1;
-  --yellow-color: rgb(255,218,26);
+  --gray-color: #cdcdcd;
+  --cyan-color: rgb(141, 231, 247);
   --dark-gray-color: #757575;
   --black-color: #000000;
   --white-color: #ffffff;
@@ -20,22 +21,33 @@ body {
   height: 100vh;
   display: flex;
   flex-direction:column;
-  font-size: calc(0.6em + 0.5vw);
-  min-width: 1000px;
-  min-height: 500px;
-  background-image: linear-gradient(to bottom, rgba(255,0,0,0), rgb(0, 47, 167));
+  min-width: 1300px;
+  min-height: 600px;
+  background: linear-gradient(to bottom, #000428, #004e92);
 }
 
 .title {
-  font-family: sans-serif;
-  font-weight:900;
-  color: var(--black-color);
-  font-size: calc(1.5em + 0.5vw);
+  font-family: "Cairo";
+  color: var(--white-color);
   margin: 0;
-  height: 60px;
-  padding-top: 10px;
+  height: 100px;
   padding-bottom: 10px;
   text-align: center;
+  justify-content: center;
+  letter-spacing: 1px;
+  line-height: 2;
+  font-size: 2em;
+}
+
+h1 {
+  background-image: url(title_background.gif);
+  background-size: cover;
+  color: transparent;
+  margin: 0;
+  background-clip: text;
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  text-transform: uppercase;
 }
 
 .selection-container {
@@ -44,39 +56,99 @@ body {
   height: 60px;
 }
 
-.selection-container .select-platform {
-  height: 100%;
-  padding-top: 5px;
-  width: auto;
-  margin-right: 25px;
+.select-platform {
+  position: relative;
+  font-family: Arial;
+  width: 30%;
+  padding-left: 10%;
+  margin-left: 5%;
 }
 
-.selection-container .select-platform .platform-label {
-  margin-right: 10px;
-  padding-top: 5px;
+.select-model {
+  position: relative;
+  font-family: Arial;
+  width: 30%;
+  padding-left: 10%;
 }
 
-.selection-container .select-model {
-  height: 100%;
-  width: auto;
-  padding-top: 5px;
-  margin-right: 10px;
+.select-model select {
+  display: none;
 }
 
-.selection-container .select-model .model-label {
-  margin-right: 10px;
-  padding-top: 5px;
+.select-platform select {
+  display: none;
+}
+
+.select-selected {
+  background-color: var(--gray-color);
+  border-radius: 5px;
+}
+
+.select-selected:after {
+  position: absolute;
+  color: var(--black-color);
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: var(--black-color) transparent transparent transparent;
+}
+
+.select-arrow-active {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  color: var(--black-color);
+}
+
+.select-selected .select-arrow-active:after {
+  border-color: transparent transparent var(--black-color) transparent;
+  top: 7px;
+  color: var(--black-color);
+}
+
+.select-items div,.select-selected {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-items {
+  color: var(--black-color);
+  margin-left: 25%;
+  position: absolute;
+  background-color: var(--gray-color);
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .selection-container input[type="button"] {
   float: right;
   width: auto;
   padding: 5px 10px;
-  margin-bottom: 10px;
-  font-size: calc(0.6em + 0.5vw);
+  margin-left: 5%;
   border: none;
   border-radius: 5px;
-  background-color: var(--yellow-color);
+  background-color: var(--cyan-color);
   color: var(--black-color);
   cursor: pointer;
 }
@@ -84,7 +156,7 @@ body {
 .hcontainer {
   display: flex;
   flex-direction: row;
-  height: calc(100% - 200px);
+  height: calc(100% - 220px);
 }
 
 .lcontainer {
@@ -120,7 +192,6 @@ body {
   align-items: center;
   margin-top: 10px;
   margin-bottom: 20px;
-  font-size: calc(0.6em + 0.5vw);
   display: none;
   overflow: hidden;
 }
@@ -150,10 +221,9 @@ body {
   margin-top: 10px;
   margin-bottom: 20px;
   margin-right: 10px;
-  font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
-  background-color: var(--yellow-color);
+  background-color: var(--cyan-color);
   color: var(--black-color);
   cursor: pointer;
 }
@@ -164,7 +234,6 @@ body {
   padding: 10px 20px;
   margin-top: 10px;
   margin-bottom: 20px;
-  font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
   background-color: var(--gray-color);
@@ -186,9 +255,11 @@ body {
   box-shadow: 0 2px 5px var(--shadow-color);
   padding: 20px;
   height: 100vh;
-  overflow-y: auto;
   display: flex;
+  overflow-y: auto;
+  overflow-x: hidden;
   flex-direction:column-reverse;
+  position: relative;
 }
 
 .rcontainer .chat-input {
@@ -202,7 +273,6 @@ body {
   margin-bottom: 20px;
   margin-right: 15px;
   padding-left: 10px;
-  font-size: calc(0.6em + 0.5vw);
   border: 1px solid var(--border-color);
   border-radius: 5px;
   box-sizing: border-box;
@@ -215,10 +285,9 @@ body {
   margin-top: 10px;
   margin-bottom: 20px;
   margin-right: 10px;
-  font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
-  background-color: var(--yellow-color);
+  background-color: var(--cyan-color);
   color: var(--black-color);
   cursor: pointer;
 }
@@ -229,7 +298,6 @@ body {
   padding: 10px 20px;
   margin-top: 10px;
   margin-bottom: 20px;
-  font-size: calc(0.6em + 0.5vw);
   border: none;
   border-radius: 5px;
   background-color: var(--gray-color);
@@ -248,8 +316,20 @@ body {
   display: flex;
   flex-direction:row;
   justify-content: flex-end;
+  transform: scale(0);
+  transform-origin: 100% 100%;
   padding-top: 5px;
   padding-bottom: 5px;
+  animation: message 0.15s ease-out 0s forwards;
+}
+
+.user-message .user-message-bubble-tail {
+  width: 0;
+  transform: scale(50%);
+  transform-origin: 0 100%;
+  border-left: 0 solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid var(--blue-color);
 }
 
 .ai-message {
@@ -258,6 +338,18 @@ body {
   justify-content: flex-start;
   padding-top: 5px;
   padding-bottom: 5px;
+  transform-origin: 0 100%;
+  transform: scale(0);
+  animation: message 0.15s ease-out 0s forwards;
+}
+
+.ai-message .ai-message-bubble-tail {
+  width: 0;
+  transform: scale(50%);
+  transform-origin: 100% 100%;
+  border-left: 20px solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 20px solid var(--green-color);
 }
 
 .help-message {
@@ -266,14 +358,29 @@ body {
   justify-content: flex-start;
   padding-top: 5px;
   padding-bottom: 5px;
+  transform-origin: 0 100%;
+  transform: scale(0);
+  animation: message 0.15s ease-out 0s forwards;
+  animation-delay: 0.2s;
+}
+
+.help-message .help-message-bubble-tail {
+  width: 0;
+  transform: scale(50%);
+  transform-origin: 100% 100%;
+  border-left: 20px solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 20px solid var(--gray-color);
 }
 
 .user-message .user-message-bubble {
   background-color: var(--blue-color);
   color: var(--white-color);
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px var(--shadow-color);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 0;
   max-width: 97%;
   overflow-wrap: break-word;
 }
@@ -282,8 +389,10 @@ body {
   background-color: var(--green-color);
   color: var(--black-color);
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px var(--shadow-color);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 5px;
   max-width: 97%;
   overflow-wrap: break-word;
 }
@@ -292,16 +401,33 @@ body {
   background-color: var(--gray-color);
   color: var(--black-color);
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px var(--shadow-color);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 5px;
   max-width: 97%;
   overflow-wrap: break-word;
 }
 
+@keyframes message {
+  0% {
+    max-height: 100vmax;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    max-height: 100vmax;
+    overflow: visible;
+    padding-top: 1rem;
+  }
+}
+
 .copyright {
   margin: 0;
-  height: 80px;
-  padding-top: 50px;
+  height: 60px;
+  padding-top: 30px;
   padding-bottom: 10px;
   color: var(--white-color);
   text-align: center;
