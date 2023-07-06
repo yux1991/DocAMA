@@ -9,7 +9,16 @@
   </head>
 
   <body>
-    <div class="title" id="title"><h1>Ask me anything about the document</h1></div>
+    <div class="title-container">
+      <div class="title" id="title"><h1>Ask me anything about the document</h1></div>
+
+      <button class="theme-btn light" onclick="setTheme('light')" title="Light mode">
+        <img src="https://assets.codepen.io/210284/sun.png" alt="sun">
+      </button>
+      <button class="theme-btn dark" onclick="setTheme('dark')" title="Dark mode">
+        <img src="https://assets.codepen.io/210284/moon.png" alt="moon">
+      </button>
+    </div>
 
     <div class="selection-container">
       <div class="select-platform" id="select-platform">
@@ -23,9 +32,6 @@
       <div class="select-model" id="select-model">
         <select name="model_name" id="model-select-list">
             <option value="0">Select model:</option>
-            <option value="1">test</option>
-            <option value="2">test2</option>
-            <option value="3">test3</option>
         </select>
       </div>
       <input type="button" value="Load LLM" onclick="clickLoad()">

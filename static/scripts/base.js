@@ -2,6 +2,7 @@ const input = document.getElementById("user-input");
 const charCount = document.getElementById("charCount");
 const fileInput = document.getElementById('pdfFile');
 var modelLoaded = false;
+const setTheme = theme => document.documentElement.className = theme;
 
 input.addEventListener("input", function() {
   var count = input.value.length;
@@ -189,7 +190,7 @@ function showAiMessage(userInput) {
         if (typeof js.answer == 'string') {
           aiMessageBubble.textContent = js.answer;
         } else if (typeof js.alert == 'string') {
-          showHelpMessage(js.alert);
+          aiMessageBubble.textContent = js.alert;
         }
       });
   
