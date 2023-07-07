@@ -13,7 +13,8 @@ url('https://fonts.googleapis.com/css?family=Cairo');
   --message-white-color: #ffffff;
   --orange-color: #fbd775;
   --cyan-button-color: rgb(141, 231, 247);
-  --window-background-color: #dedddd;
+  --window-background-color-out: #b2b2b2;
+  --window-background-color-in: #e9e9e9;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --background-gradient-top-color: #3b49ca;
   --background-gradient-bottom-color: #9bc8ef;
@@ -27,10 +28,11 @@ url('https://fonts.googleapis.com/css?family=Cairo');
   --user-message-color: #0089e4;
   --ai-message-color: #adff2f;
   --cyan-button-color: rgb(141, 231, 247);
-  --window-background-color: #dedddd;
+  --window-background-color-out: #b2b2b2;
+  --window-background-color-in: #e9e9e9;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --background-gradient-top-color: #3b49ca;
-  --background-gradient-bottom-color: #9bc8ef;
+  --background-gradient-bottom-color: #d4c4e7;
   --selected-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -41,10 +43,11 @@ url('https://fonts.googleapis.com/css?family=Cairo');
   --user-message-color: #016bb2;
   --ai-message-color: #7ab424;
   --cyan-button-color: rgb(0, 108, 127);
-  --window-background-color: #4d4b4b;
+  --window-background-color-out: #4d4d4d;
+  --window-background-color-in: #7f7f7f;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --background-gradient-top-color: #000428;
-  --background-gradient-bottom-color: #004e92;
+  --background-gradient-bottom-color: #640092;
   --selected-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -58,7 +61,7 @@ body {
   flex-direction:column;
   min-width: 1450px;
   min-height: 600px;
-  background: linear-gradient(to bottom, var(--background-gradient-top-color), var(--background-gradient-bottom-color));
+  background: linear-gradient(to bottom right, var(--background-gradient-top-color), var(--background-gradient-bottom-color));
 }
 
 .title-container {
@@ -245,7 +248,7 @@ h1 {
 }
 
 .lcontainer .doc-window {
-  background-color: var(--window-background-color);
+  background: linear-gradient(to bottom right, var(--window-background-color-out), var(--window-background-color-in));
   border-radius: 10px;
   box-shadow: 0 2px 5px var(--shadow-color);
   padding: 0;
@@ -327,7 +330,7 @@ h1 {
 }
 
 .rcontainer .chat-window {
-  background-color: var(--window-background-color);
+  background: linear-gradient(to bottom right, var(--window-background-color-out), var(--window-background-color-in));
   border-radius: 10px;
   box-shadow: 0 2px 5px var(--shadow-color);
   padding: 20px;
