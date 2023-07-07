@@ -1,7 +1,7 @@
 import requests
 from flask import Flask, render_template, jsonify, request
 from predictor_multiton import SimplePredictorMultiton
-from configuration import PredictorConfig
+from configuration import *
 import os, shutil, json
 from huggingface_hub import HfApi, ModelFilter
 
@@ -54,11 +54,29 @@ def huggingface_models():
 @app.route('/load_model', methods=['POST'])
 def load_model():
     if request.method == 'POST':
-        global MODEL_KEY
         request_json = request.get_json()
-        model_configuration = PredictorConfig(platform=request_json['platform'], model_name=request_json['model_name'])
-        MODEL_KEY = SimplePredictorMultiton.Key(model_configuration)
-        SimplePredictorMultiton.get_instance(MODEL_KEY)
+
+        model_configuration = LLMConfig(
+            platform=request_json['platform'],
+            model_name=request_json['model_name'],
+            temperature=1e-10
+        )
+
+        chain_configuration = ChainConfig(
+            chain_name ='Conversation',
+            memory_name='ConversationSummaryBuffer',
+            prompt_name='standard',
+            token_limit=100
+        )
+
+        predictor_configuration = PredictorConfig(model_configuration, chain_configuration)
+
+        global PREDICTOR_KEY
+
+        PREDICTOR_KEY = SimplePredictorMultiton.Key(predictor_configuration)
+
+        SimplePredictorMultiton.get_instance(PREDICTOR_KEY)
+
         return jsonify({'message': 'Model loaded!'})
 
 @app.route('/healthcheck')
@@ -72,11 +90,11 @@ def calculate():
         message = request.get_json()
         user_input = message['user_input']
         try:
-            MODEL_KEY
+            PREDICTOR_KEY
         except NameError:
             response = jsonify({'alert': 'Please load the LLM model first!'})
         else:
-            predictor = SimplePredictorMultiton.get_instance(MODEL_KEY)
+            predictor = SimplePredictorMultiton.get_instance(PREDICTOR_KEY)
             answer = predictor.predict(user_input=user_input)
             response = jsonify({'answer': answer})
         return response
@@ -84,7 +102,7 @@ def calculate():
 @app.route('/clearmemory', methods=['POST'])
 def clear_memory():
     if request.method == 'POST':
-        predictor = SimplePredictorMultiton.get_instance(MODEL_KEY)
+        predictor = SimplePredictorMultiton.get_instance(PREDICTOR_KEY)
         predictor.clear_memory()
         return 'Memory cleared'
 

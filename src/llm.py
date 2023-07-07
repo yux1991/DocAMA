@@ -8,7 +8,7 @@ class AbstractLLM(abc.ABC):
         self._config = config
 
     @abc.abstractclassmethod
-    def _get_instance(self,user_input):
+    def _get_instance(self):
         pass
 
     def get_instance(self):

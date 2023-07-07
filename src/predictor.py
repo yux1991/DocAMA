@@ -1,21 +1,26 @@
 import abc
-from langchain import LLMChain, PromptTemplate
-from llm_multiton import LLMMultiton
-from configuration import LLMConfig
+from configuration import LLMConfig, ChainConfig
+from chain_multiton import ChainMultiton
 
 class AbstractPredictor(abc.ABC):
-    def __init__(self, model_config):
+    def __init__(self, model_config, chain_config):
         self._model_config = model_config
-        self._conversation = []
-        llm_configuration = LLMConfig(platform=self._model_config.platform, model_name=self._model_config.model_name, temperature=1e-10)
-        LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_instance()
+        self._chain_config = chain_config
+        llm_configuration = LLMConfig(platform=self._model_config.platform,
+                                      model_name=self._model_config.model_name,
+                                      temperature=self._model_config.temperature)
+
+        chain_configuration = ChainConfig(chain_name=self._chain_config.chain_name,
+                                          memory_name=self._chain_config.memory_name,
+                                          prompt_name=self._chain_config.prompt_name,
+                                          token_limit = self._chain_config.token_limit,
+                                          llm_configuration=llm_configuration)
+
+        self._chain_multiton = ChainMultiton.get_instance(ChainMultiton.Key(chain_configuration))
+        self._chain = self._chain_multiton.get_instance()
 
     @abc.abstractclassmethod
     def _predict(self,user_input):
-        pass
-
-    @abc.abstractclassmethod
-    def _get_answer(self,user_input):
         pass
 
     @abc.abstractclassmethod
@@ -25,48 +30,15 @@ class AbstractPredictor(abc.ABC):
     def predict(self,user_input):
         return self._predict(user_input)
 
-    def get_answer(self):
-        return self._get_answer()
-
     def clear_memory(self):
         return self._clear_memory()
 
 class SimplePredictor(AbstractPredictor):
-    def __init__(self, model_config):
-        super().__init__(model_config)
+    def __init__(self, model_config, chain_config):
+        super().__init__(model_config, chain_config)
     
-    def _get_answer(self):
-        template = """Question: {question}
-
-        Answer: """
-
-        prompt = PromptTemplate(
-                template=template,
-            input_variables=['question']
-        )
-
-        # user question
-        question = ';'.join(self._conversation) 
-
-        llm_configuration = LLMConfig(platform=self._model_config.platform, model_name=self._model_config.model_name, temperature=1e-10)
-        llm = LLMMultiton.get_instance(LLMMultiton.Key(llm_configuration)).get_instance()
-
-
-        llm_chain = LLMChain(
-            prompt=prompt,
-            llm=llm
-        )
-
-        print('Question: '+question)
-        answer = llm_chain.run(question)
-        print('Answer: '+answer)
-        return answer
-
     def _predict(self, user_input):
-        self._user_input = user_input
-        self._conversation.append(self._user_input)
-
-        return self.get_answer()
+        return self._chain.predict(human_input = user_input)
 
     def _clear_memory(self):
-        self._conversation = []
+        self._chain_multiton.clear_memory()
