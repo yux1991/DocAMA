@@ -11,12 +11,12 @@ url('https://fonts.googleapis.com/css?family=Cairo');
   --white-color: #ffffff;
   --message-black-color: #000000;
   --message-white-color: #ffffff;
-  --orange-color: #fbd775;
+  --orange-color: #fcdd87;
   --cyan-button-color: rgb(141, 231, 247);
   --window-background-color-out: #b2b2b2;
   --window-background-color-in: #e9e9e9;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --background-gradient-top-color: #3b49ca;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --background-gradient-top-color: #fdfadb;
   --background-gradient-bottom-color: #9bc8ef;
   --selected-color: rgba(0, 0, 0, 0.1);
 }
@@ -24,30 +24,30 @@ url('https://fonts.googleapis.com/css?family=Cairo');
 :root.light {
   --black-color: #000000;
   --white-color: #ffffff;
-  --orange-color: #fbd775;
+  --orange-color: #fcdd87;
   --user-message-color: #0089e4;
   --ai-message-color: #adff2f;
   --cyan-button-color: rgb(141, 231, 247);
   --window-background-color-out: #b2b2b2;
   --window-background-color-in: #e9e9e9;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --background-gradient-top-color: #3b49ca;
-  --background-gradient-bottom-color: #d4c4e7;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --background-gradient-top-color: #fdfadb;
+  --background-gradient-bottom-color: #9bc8ef;
   --selected-color: rgba(0, 0, 0, 0.1);
 }
 
 :root.dark {
   --black-color: #dfdddd;
   --white-color: #000000;
-  --orange-color: #846000;
+  --orange-color: #582765;
   --user-message-color: #016bb2;
   --ai-message-color: #7ab424;
-  --cyan-button-color: rgb(0, 108, 127);
+  --cyan-button-color: #1e7627;
   --window-background-color-out: #4d4d4d;
   --window-background-color-in: #7f7f7f;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --background-gradient-top-color: #000428;
-  --background-gradient-bottom-color: #640092;
+  --shadow-color: rgba(255, 255, 255, 0.2);
+  --background-gradient-top-color: #1e001e;
+  --background-gradient-bottom-color: #014703;
   --selected-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -84,7 +84,7 @@ body {
 }
 
 .theme-btn {
-  height: 50px;
+  height: 30px;
   border-radius: 50%;
   margin-left: auto;
   cursor: pointer;
@@ -248,7 +248,7 @@ h1 {
 }
 
 .lcontainer .doc-window {
-  background: linear-gradient(to bottom right, var(--window-background-color-out), var(--window-background-color-in));
+  background: transparent;
   border-radius: 10px;
   box-shadow: 0 2px 5px var(--shadow-color);
   padding: 0;
@@ -330,7 +330,7 @@ h1 {
 }
 
 .rcontainer .chat-window {
-  background: linear-gradient(to bottom right, var(--window-background-color-out), var(--window-background-color-in));
+  background: transparent;
   border-radius: 10px;
   box-shadow: 0 2px 5px var(--shadow-color);
   padding: 20px;
