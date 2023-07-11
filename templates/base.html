@@ -13,10 +13,10 @@
       <div class="title" id="title"><h1>Ask me anything about the document</h1></div>
 
       <button class="theme-btn light" onclick="setTheme('light')" title="Light mode">
-        <img src="https://assets.codepen.io/210284/sun.png" alt="sun">
+        <img src="{{ url_for('static', filename='styles/sun.png') }}" alt="sun">
       </button>
       <button class="theme-btn dark" onclick="setTheme('dark')" title="Dark mode">
-        <img src="https://assets.codepen.io/210284/moon.png" alt="moon">
+        <img src="{{ url_for('static', filename='styles/moon.png') }}" alt="moon">
       </button>
     </div>
 
